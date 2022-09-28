@@ -5,6 +5,7 @@ const port = 8000
 express()
     .use(helmet())
     .use(morgan('tiny'))
+    .use(express.json())
     
     .get('/', (req, res) => {
         res.send('Hello World!')
