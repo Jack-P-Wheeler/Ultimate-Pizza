@@ -4,11 +4,12 @@ export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
   :root {
     --color-background: #fffffe;
-    --color-headline: #272343;
-    --color-paragraph: #2d334a;
-    --color-button: #ffd803;
-    --color-button-text: #272343;
-    --color-card: #bae8e8;
+    --color-headline: #094067;
+    --color-paragraph: #5f6c7b;
+    --color-button: #3da9fc;
+    --color-button-text: #fffffe;
+    --color-card: #d8eefe;
+    --color-tertiary: #ef4565;
     --font-heading: 'Roboto', sans-serif;
     --font-body: 'Roboto', sans-serif;
     --padding-page: 24px;
@@ -64,9 +65,8 @@ h2,
 h3,
 label,
 button {
-  color: var(--color-heading);
+  color: var(--color-button-paragraph);
   font-family: var(--font-heading);
-  font-size: 32px;
 }
 p,
 a,
@@ -74,11 +74,11 @@ li,
 blockquote,
 input {
   font-family: var(--font-body);
+  color: var(--color-headline);
 }
 
   input {
     font-size: 24px;
-    height: 42px;
     border: 2px solid var(--color-orange);
     border-radius: 4px;
     padding: 0 12px;

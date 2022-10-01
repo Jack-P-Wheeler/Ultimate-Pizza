@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import Home from "./Home";
+import Admin from "./AdminPage/Admin";
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <Header/>
       <Routes>
         <Route path="/" element={<Home/>}/>
+        <Route path="/admin" element={<Admin/>}/>
       </Routes>
     </Router>
   );

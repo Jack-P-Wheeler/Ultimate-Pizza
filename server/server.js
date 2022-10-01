@@ -2,7 +2,8 @@ const express = require('express')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const { addTopping,
-        getTopping, } = require("./handlers")
+        getTopping,
+        newPremadePizza, } = require("./handlers")
 const port = 8000
 express()
     .use(helmet())
@@ -11,6 +12,7 @@ express()
     
     //Admin Post
     .post("/admin/add-topping", addTopping)
+    .post("/admin/post-new-pizza", newPremadePizza)
 
 
 
