@@ -3,7 +3,11 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const { addTopping,
         getTopping,
-        newPremadePizza, } = require("./handlers")
+        newPremadePizza,
+        getPizzas,
+        getUser,
+        newUser, 
+        getTravelTime, } = require("./handlers")
 const port = 8000
 express()
     .use(helmet())
@@ -18,9 +22,11 @@ express()
 
 
     .get("/get-topping/:toppingName?", getTopping)
+    .get("/get-pizzas", getPizzas)
+    .get("/get-user/:userEmail", getUser)
+    .post("/new-user", newUser)
 
-
-
+    .get("/get-travel-time/:origin/:destination", getTravelTime)
 
 
 

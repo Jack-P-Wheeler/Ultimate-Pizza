@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import NewTopping from "./NewTopping";
-import ToppingItem from "../PizzaMaker/ToppingItem";
 import PizzaCreate from "../PizzaMaker/PizzaCreate";
 
 const Admin = () => {
@@ -16,6 +15,8 @@ const Admin = () => {
 
             <SectionLabel>Add New Pizzas</SectionLabel>
             <PizzaCreate update={update}/>
+
+            
         </Wrapper>
     )
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import FailedNotif from "../FailedNotif";
 import ToppingItem from "./ToppingItem";
 
 const PizzaCreate = ({update}) => {
@@ -28,12 +29,17 @@ const PizzaCreate = ({update}) => {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data)
-                })
-                .catch((error) => {
-                    if (error.status === 400) {
+                    if (data.status === 200){
+                        console.log(data)
+                        setFailed(false)
+                    } else {
                         setFailed(true)
                     }
+                })
+                .catch((error) => {
+
+                    
+
                     console.error("error", error);
                 });
         }
@@ -50,9 +56,10 @@ const PizzaCreate = ({update}) => {
                 return <ToppingItem key={topping.name} name={topping.name} price={topping.price} selectedToppings={selectedToppings} setSelectedToppings={setSelectedToppings}/>
             })}
             <PizzaEntryForm onSubmit={(ev) => handleNewPizza(ev, newPizzaName, selectedToppings)}>
-                <NewNameInput value={newPizzaName} onChange={(ev) => setNewPizzaName(ev.target.value)}></NewNameInput>
+                <NewNameInput required value={newPizzaName} onChange={(ev) => setNewPizzaName(ev.target.value)}></NewNameInput>
                 <SubmitButton>Submit</SubmitButton>
             </PizzaEntryForm>
+            {failed && <FailedNotif/>}
         </Wrapper>
         
     )

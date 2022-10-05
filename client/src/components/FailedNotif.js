@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 const FailedNotif = () => {
     return (
-        <p>Failed!</p>
+        <p>Failed! Please try again.</p>
     )
 }
 
