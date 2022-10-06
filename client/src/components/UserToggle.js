@@ -25,6 +25,7 @@ const Button = styled.button`
   font-weight: bold;
   background: var(--color-button);
   border: none;
+  border-radius: 5px;
   filter: drop-shadow(0 2px 5px hsla(360, 100%, 0%, 0.5));
 
   &:hover {

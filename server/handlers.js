@@ -123,15 +123,25 @@ const getPizzas = async (req, res) => {
         await client.connect()
         const db = client.db("Ultimate-Pizza")
         const pizzas = await db.collection("pizzas").find().toArray()
-        
+        const toppings = await db.collection("toppings").find().toArray()
+        const storeInfo = await db.collection("store-info").findOne({_id: "prices"})
+        console.log(storeInfo)
+        const newPizzas = pizzas.map((pizza) => {
+            let price = 0
+            pizza.toppings.forEach((topping) => {
+                const isHalf = topping.half === "whole" ? 1 : 2
+                price += toppings.find(toppingInList => toppingInList.name === topping.name).price / isHalf
+            })
+            return {name: pizza.name, toppings: pizza.toppings, prices: {small: price * 0.75, medium: price * 1, large: price * 1.25}}
+        })
         res.status(200).json({
             status: 200,
-            message: pizzas
+            message: newPizzas
         })        
     } catch (err) {
         res.status(500).json({
             status: 500,
-            message: "Error retrieving pizzas" + err.message
+            message: "Error retrieving pizzas " + err.message
         })
     } finally {
         await client.close()

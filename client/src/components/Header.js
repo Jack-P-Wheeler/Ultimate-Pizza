@@ -55,7 +55,7 @@ const AdminLink = styled(Link)`
     display: flex;
     align-items: center;
     padding: 5px;
-
+    border-radius: 5px;
 
     &:hover {
         cursor: pointer;
