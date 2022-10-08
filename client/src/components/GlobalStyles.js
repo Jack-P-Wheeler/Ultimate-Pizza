@@ -6,10 +6,10 @@ export default createGlobalStyle`
     --color-background: #fffffe;
     --color-headline: #094067;
     --color-paragraph: #5f6c7b;
-    --color-button: #3da9fc;
+    --color-button: #1e2ee2;
     --color-button-text: #fffffe;
     --color-card: #d8eefe;
-    --color-tertiary: #ef4565;
+    --color-tertiary: rgb(226,30,38);
     --font-heading: 'Roboto', sans-serif;
     --font-body: 'Roboto', sans-serif;
     --padding-page: 24px;
@@ -65,16 +65,17 @@ h2,
 h3,
 label,
 button {
-  color: var(--color-button-paragraph);
+  color: black;
   font-family: var(--font-heading);
 }
 p,
 a,
 li,
 blockquote,
-input {
+input,
+button {
   font-family: var(--font-body);
-  color: var(--color-headline);
+  color: black;
 }
 
   input {

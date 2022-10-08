@@ -9,6 +9,11 @@ const UserProvider = ({ children }) => {
   const { user } = useAuth0();
   const [loaded, setLoaded] = useState(false)
   const [currentUser, setCurrentUser] = useState(false)
+  const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")) ? JSON.parse(localStorage.getItem("cart")) : [])
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart))
+  }, [cart])
 
   useEffect(() => {
     if (user) {
@@ -44,7 +49,7 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser, loaded}}>
+    <UserContext.Provider value={{ currentUser, setCurrentUser, loaded, cart, setCart}}>
       {children}
     </UserContext.Provider>
   );
