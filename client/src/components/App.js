@@ -10,13 +10,13 @@ import AddressEntry from "./AddressEntry";
 
 const App = () => {
   const { user } = useAuth0();
-  const {currentUser} = useContext(UserContext)
+  const {currentUser, pizzas, toppings} = useContext(UserContext)
   return (
     <Router>
       <GlobalStyles/>
       <Header/>
       <Routes>
-        <Route path="/" element={<Home/>}/>
+        {pizzas && toppings && <Route path="/" element={<Home/>}/>}
         {currentUser && <Route path="/admin" element={currentUser.isAdmin ? <Admin/> : <Navigate to={"/"}/>}/>}
         <Route path="address" element={<AddressEntry/>}/>
       </Routes>

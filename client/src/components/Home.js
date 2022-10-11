@@ -3,24 +3,18 @@ import styled from "styled-components";
 import PizzaCard from "./PizzaCard";
 import CustomPizza from "./UserPizzaMaker/CustomPizza";
 import Cart from "./Cart";
+import { UserContext } from "./UserContext";
+import { useContext } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import OpinionOrders from "./OpinionOrders";
 
 const Home = () => {
-    const [pizzas, setPizzas] = useState(false)
-    const [toppings, setToppings] = useState([])
-
-    useEffect(() => {
-        fetch("/get-pizzas")
-        .then(res => res.json())
-        .then(data => setPizzas(data.message))
-        .catch(err => console.log(err))
-
-        fetch("/get-topping")
-        .then(res => res.json())
-        .then(data => setToppings(data.message))
-        .catch(err => console.log(err))
-    }, [])
+    const { pizzas, toppings, currentUser } = useContext(UserContext)
+    const user = useAuth0()
     return (
         <Wrapper>
+            {user.isAuthenticated && currentUser && <OpinionOrders/>}
+            
             <PageDescription>Try our house Pizzas!</PageDescription>
             <PremadePizzas>
                 {pizzas && pizzas.map((pizza) => {
@@ -29,7 +23,7 @@ const Home = () => {
             </PremadePizzas>
             <PageDescription>Make your own Pizza!</PageDescription>
             <CustomPizza toppings={toppings} />
-            {pizzas && <Cart pizzas={pizzas} toppings={toppings}/>}
+            {user.isAuthenticated && <Cart/>}
             
         </Wrapper>
     )

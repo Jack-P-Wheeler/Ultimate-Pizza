@@ -10,6 +10,8 @@ const UserProvider = ({ children }) => {
   const [loaded, setLoaded] = useState(false)
   const [currentUser, setCurrentUser] = useState(false)
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")) ? JSON.parse(localStorage.getItem("cart")) : [])
+  const [pizzas, setPizzas] = useState(false)
+  const [toppings, setToppings] = useState(false)
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart))
@@ -21,6 +23,7 @@ const UserProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.result) {
+            console.log(data.result)
             setCurrentUser(data.result);
             setLoaded(true);
           } else {
@@ -31,6 +34,20 @@ const UserProvider = ({ children }) => {
     }
   }, [user]);
 
+  
+
+    useEffect(() => {
+        fetch("/get-pizzas")
+        .then(res => res.json())
+        .then(data => setPizzas(data.message))
+        .catch(err => console.log(err))
+
+        fetch("/get-topping")
+        .then(res => res.json())
+        .then(data => setToppings(data.message))
+        .catch(err => console.log(err))
+    }, [])
+
   const googleUserHandle = (data) => {
     fetch("/new-user", {
       method: "POST",
@@ -38,7 +55,7 @@ const UserProvider = ({ children }) => {
         Accept: "application/json",
         "content-Type": "application/json",
       },
-      body: JSON.stringify({ ...user, info: [], isAdmin: false }),
+      body: JSON.stringify({ ...user, address: null, isAdmin: false }),
     })
       .then(() => {
         setLoaded(true);
@@ -49,7 +66,7 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser, loaded, cart, setCart}}>
+    <UserContext.Provider value={{ currentUser, setCurrentUser, loaded, cart, setCart, pizzas, toppings}}>
       {children}
     </UserContext.Provider>
   );

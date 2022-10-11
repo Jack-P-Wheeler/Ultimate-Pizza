@@ -1,26 +1,59 @@
 import styled from "styled-components"
 import { UserContext } from "./UserContext"
 import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 
-const Cart = ({pizzas, toppings}) => {
-    const {cart} = useContext(UserContext)
+const Cart = () => {
+    const {currentUser, cart, pizzas, toppings, setCart} = useContext(UserContext)
+    const navigate = useNavigate()
 
     const firstCapital = (origStr) => {
         return origStr.split(" ").map(str => str[0].toUpperCase() + str.substring(1, str.length)).join(" ")
     }
 
     const customPrice = (toppingsList) => {
-        console.log(toppingsList)
-        return "Not done yet"
+        let customPriceTotal = 0
+        toppingsList.forEach((topping) => {
+            customPriceTotal += toppings.find(toppingDataItem => toppingDataItem.name === topping.toppingName).price
+        })
+        return customPriceTotal
+    }
+
+    const handleOrder = () => {
+        if (!currentUser.address){
+            navigate("/address")
+        } else {
+            console.log("Ordered!")
+            fetch("/send-order", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "content-Type": "application/json",
+                },
+                body: JSON.stringify({accountEmail: currentUser.email, cart, timeStamp: Date.now()}),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data)
+                    setCart([])
+                })
+                .catch((error) => {
+                    console.error("error", error);
+                });
+            
+        }
     }
 
     return (
         <Wrapper>
+            <OrderButton onClick={(ev) => handleOrder()}>Order</OrderButton>
             <CartItems>
                 {cart.map((item, index) => <CartItem key={item.pizzaName + item.price + index}>
                         <CartItemName>{firstCapital(item.size + " " + item.pizzaName)}</CartItemName>
                         {item.pizzaName !== "Custom Job" && <CartItemPrice>{"$" + (pizzas.find((pizza) => pizza.name === item.pizzaName).prices[item.size]).toFixed(2)}</CartItemPrice>}
-                        {item.pizzaName === "Custom Job" && <CartItemPrice>{"$" + customPrice(item.pizzaToppings)}</CartItemPrice>}
+                        {item.pizzaName === "Custom Job" && <CartItemPrice>{"$" + customPrice(item.pizzaToppings).toFixed(2)}</CartItemPrice>}
+                        {item.pizzaName === "Custom Job" && item.pizzaToppings.map(topping =><Topping>{firstCapital(topping.toppingName)}</Topping>)}
+
                     </CartItem>)}
             </CartItems>
             
@@ -29,18 +62,20 @@ const Cart = ({pizzas, toppings}) => {
 }
 
 const Wrapper = styled.div`
-    height: 10vh;
+    height: fit-content;
     width: 100%;
     position: fixed;
     bottom: 0;
     background: white;
-    overflow: auto;
+    
+    display: flex;
 `
 const CartItems = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
     height: 100%;
+    overflow: auto;
 `
 const CartItem = styled.div`
     background: var(--color-tertiary);
@@ -58,6 +93,23 @@ const CartItemName = styled.p`
 const CartItemPrice = styled.p`
     color: white;
     font-size: 20px;
+`
+const Topping = styled.p`
+    color: white;
+`
+const OrderButton = styled.button`
+    background: var(--color-button);
+    color: white;
+    border: none;
+    font-size: 30px;
+    bottom: 0;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: all 30ms;
+    &:active{
+        transform: scale(0.9);
+        box-shadow: inset 0 0 10px hsla(0, 100%, 0%, 0.5);
+    }
 `
 
 export default Cart

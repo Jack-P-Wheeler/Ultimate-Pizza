@@ -1,17 +1,21 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useContext } from "react";
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 
 const PizzaCard = ({name, toppings, price}) => {
-    const { setCart, cart } = useContext(UserContext)
+    const { setCart, cart, currentUser } = useContext(UserContext)
+    const { loginWithRedirect } = useAuth0()
+
     const firstCapital = (origStr) => {
         return origStr.split(" ").map(str => str[0].toUpperCase() + str.substring(1, str.length)).join(" ")
     }
     const addToCart = (pizzaName, size) => {
-        
-        //const currentCart =  localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : []
-        //localStorage.setItem("cart", JSON.stringify([...currentCart, {pizzaName, size}]))
-        setCart([...cart, {pizzaName, size}])
+        if (currentUser) {
+            setCart([...cart, {pizzaName, size}])
+        } else {
+            loginWithRedirect()
+        }
     }
     return (
         <Wrapper>
@@ -28,7 +32,7 @@ const PizzaCard = ({name, toppings, price}) => {
             
         </Wrapper>
         
-    )    
+    )
 }
 
 const Wrapper = styled.div`

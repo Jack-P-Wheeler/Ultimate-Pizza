@@ -2,13 +2,15 @@ import { useState } from "react"
 import styled from "styled-components"
 import { useContext } from "react"
 import { UserContext } from "../UserContext"
+import { useAuth0 } from "@auth0/auth0-react";
 
 const CustomPizza = ({toppings}) => {
     const smallPizza = require("./pizza halves/pizza halves-small.png")
     const mediumPizza = require("./pizza halves/pizza halves-medium.png")
     const largePizza = require("./pizza halves/pizza halves-large.png")
 
-    const { setCart, cart } = useContext(UserContext)
+    const { setCart, cart, currentUser } = useContext(UserContext)
+    const { loginWithRedirect } = useAuth0()
 
     const pizzaHalves = {small: smallPizza, medium: mediumPizza, large: largePizza}
     const [size, selectSize] = useState(undefined)
@@ -33,7 +35,10 @@ const CustomPizza = ({toppings}) => {
             setCart([...cart, {pizzaName: "Custom Job", size, pizzaToppings}])
             setPizzaToppings([])
         }
-        
+
+        if (!currentUser) {
+            loginWithRedirect()
+        }
     }
 
     return (

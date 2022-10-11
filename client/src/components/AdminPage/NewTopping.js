@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 const NewTopping = ({update, setUpdate}) => {
     const initialTopping = {name: "", price: "", isVegan: true, isSpicy: false, isGlutenFree: true}
-    const [toppingExists, setToppingExists] = useState()
     const [newToppingObj, setNewToppingObj] = useState(initialTopping)
 
     const handleNewTopping = (topping) => {

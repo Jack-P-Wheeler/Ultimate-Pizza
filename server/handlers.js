@@ -196,11 +196,12 @@ const newUser = async (req, res) => {
 
 const getTravelTime = async(req, res) => {
     const {origin, destination} = req.params
+    console.log(origin)
     try {
         const travelTime = await request("https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&key=" + GOOGLE_API_KEY)
         res.status(200).json({
             status: 200,
-            data: JSON.parse(travelTime).routes[0].legs[0].duration.value,
+            data: JSON.parse(travelTime).routes[0].legs[0].duration.value <= 900 ? "In range" : "Out of range",
             message: "Found travel time"
         })
     } catch (err) {
@@ -213,6 +214,138 @@ const getTravelTime = async(req, res) => {
     }
 }
 
+const updateAddress = async(req, res) => {
+    const { userEmail, userAddress } = req.body
+    const client = new MongoClient(MONGO_URI, options);
+
+    try {
+        await client.connect();
+        const db = client.db("Ultimate-Pizza");
+        const data = await db.collection("users").updateOne({email: userEmail}, {$set: {"address": userAddress}});
+
+        res.status(200).json({
+            status: 200,
+            message: "Address updated",
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            data: req.body,
+            message: "Error updating address",
+        });
+        console.log(error);
+    } finally {
+        client.close();
+    }
+}
+
+const getOrders = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    const userEmail = req.params.userEmail;
+
+    try {
+        await client.connect();
+        const db = client.db("Ultimate-Pizza");
+        const data = await db.collection("orders").find({ accountEmail: userEmail }).toArray();
+
+        res.status(200).json({
+            status: 200,
+            result: data,
+            message: "Found orders from account",
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            data: req.body,
+            message: "Error finding orders",
+        });
+    } finally {
+        client.close();
+    }
+};
+
+const getOpinionOrders = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    const userEmail = req.params.userEmail;
+
+    try {
+        await client.connect();
+        const db = client.db("Ultimate-Pizza");
+        const customerOrders = await db.collection("orders").find({ accountEmail: userEmail }).toArray();
+        let ordersAmountTime = {}
+        let scoredOrders = []
+
+        if (customerOrders.length) {
+            
+            customerOrders.forEach((order) => {
+                order.cart.forEach((cartItem) => {
+                    if (cartItem.pizzaName !== "Custom Job") {
+                        ordersAmountTime[cartItem.pizzaName] = ordersAmountTime[cartItem.pizzaName] 
+                        ? {time: ordersAmountTime[cartItem.pizzaName].time + (Date.now() - order.timeStamp), amount: ordersAmountTime[cartItem.pizzaName].amount + 1}
+                        : {time: (Date.now() - order.timeStamp), amount: 1}
+
+                    }
+                })
+            })
+
+            Object.keys(ordersAmountTime).forEach((pizzaName) => {
+                scoredOrders.push({name: pizzaName, score: ordersAmountTime[pizzaName].amount ** 2 / (ordersAmountTime[pizzaName].time/360000)})
+            })
+
+            scoredOrders.sort((a, b) => b.score - a.score)
+
+            res.status(200).json({
+                status: 200,
+                lastOrder: customerOrders[customerOrders.length - 1].cart,
+                scoredOrders: scoredOrders.slice(0, 5),
+                message: "Found orders from account",
+            });
+        } else {
+            res.status(200).json({
+                status: 200,
+                result: [],
+                message: "Customer has no orders",
+            });
+        }
+
+        
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            data: req.body,
+            message: "Error finding orders " + error,
+        });
+    } finally {
+        client.close();
+    }
+};
+
+const sendOrder = async(req, res) => {
+    const { cart, timeStamp, accountEmail } = req.body
+    const client = new MongoClient(MONGO_URI, options);
+    try {
+        await client.connect();
+        const db = client.db("Ultimate-Pizza");
+        const data = await db.collection("orders").insertOne({cart, timeStamp, accountEmail})
+
+        res.status(200).json({
+            status: 200,
+            message: data,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            data: req.body,
+            message: "Error sending order",
+        });
+        console.log(error);
+    } finally {
+        client.close();
+    }
+}
+
+
+
 module.exports = {
     addTopping,
     getTopping,
@@ -221,4 +354,8 @@ module.exports = {
     getUser,
     newUser,
     getTravelTime,
+    updateAddress,
+    sendOrder,
+    getOrders,
+    getOpinionOrders,
 };  
