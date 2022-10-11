@@ -11,11 +11,12 @@ const Cart = () => {
         return origStr.split(" ").map(str => str[0].toUpperCase() + str.substring(1, str.length)).join(" ")
     }
 
-    const customPrice = (toppingsList) => {
+    const customPrice = (toppingsList, pizza) => {
         let customPriceTotal = 0
         toppingsList.forEach((topping) => {
-            customPriceTotal += toppings.find(toppingDataItem => toppingDataItem.name === topping.toppingName).price
+            customPriceTotal += toppings.find(toppingDataItem => toppingDataItem.name === topping.toppingName).price / (topping.selectedHalf === "whole" ? 1 : 2)
         })
+        customPriceTotal = {small: customPriceTotal * 0.75 + 10, medium: customPriceTotal * 1 + 13, large: customPriceTotal * 1.25 + 17}[pizza.size]
         return customPriceTotal
     }
 
@@ -51,7 +52,7 @@ const Cart = () => {
                 {cart.map((item, index) => <CartItem key={item.pizzaName + item.price + index}>
                         <CartItemName>{firstCapital(item.size + " " + item.pizzaName)}</CartItemName>
                         {item.pizzaName !== "Custom Job" && <CartItemPrice>{"$" + (pizzas.find((pizza) => pizza.name === item.pizzaName).prices[item.size]).toFixed(2)}</CartItemPrice>}
-                        {item.pizzaName === "Custom Job" && <CartItemPrice>{"$" + customPrice(item.pizzaToppings).toFixed(2)}</CartItemPrice>}
+                        {item.pizzaName === "Custom Job" && <CartItemPrice>{"$" + customPrice(item.pizzaToppings, item).toFixed(2)}</CartItemPrice>}
                         {item.pizzaName === "Custom Job" && item.pizzaToppings.map(topping =><Topping>{firstCapital(topping.toppingName)}</Topping>)}
 
                     </CartItem>)}
@@ -64,10 +65,9 @@ const Cart = () => {
 const Wrapper = styled.div`
     height: fit-content;
     width: 100%;
-    position: fixed;
     bottom: 0;
     background: white;
-    
+    margin-top: 100px;
     display: flex;
 `
 const CartItems = styled.div`

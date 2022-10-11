@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useContext } from "react"
 import { UserContext } from "../UserContext"
 import { useAuth0 } from "@auth0/auth0-react";
+import { BsCircleHalf } from "react-icons/bs";
 
 const CustomPizza = ({toppings}) => {
     const smallPizza = require("./pizza halves/pizza halves-small.png")
@@ -73,9 +74,13 @@ const CustomPizza = ({toppings}) => {
                     <SelectedToppingList>
 
                         {pizzaToppings.map((selectedTopping) => {
-                            return  <SelectedTopping key={selectedTopping.toppingName} onClick={(ev) => removeTopping(selectedTopping.toppingName)}>
-                                        {selectedTopping.toppingName.split(" ").map(str => str[0].toUpperCase() + str.substring(1, str.length)).join(" ")}
-                                    </SelectedTopping>
+                            return  <SelectedToppingRow>
+                                        <SelectedTopping key={selectedTopping.toppingName} onClick={(ev) => removeTopping(selectedTopping.toppingName)}>
+                                            {selectedTopping.toppingName.split(" ").map(str => str[0].toUpperCase() + str.substring(1, str.length)).join(" ")}
+                                        </SelectedTopping>
+                                        {selectedTopping.selectedHalf === "left" && <BsCircleHalf/>}
+                                        {selectedTopping.selectedHalf === "right" && <BsCircleHalf style={{rotate: "180deg"}}/>}
+                                    </SelectedToppingRow>
                         })}
 
                         
@@ -146,7 +151,11 @@ const SelectedToppingList = styled.div`
     flex-direction: column;
     flex-wrap: wrap;
 `
-
+const SelectedToppingRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
 const SelectedTopping = styled.button`
     background: none;
     border: none;
