@@ -35,6 +35,8 @@ const CustomPizza = ({toppings}) => {
         if (pizzaToppings.length){
             setCart([...cart, {pizzaName: "Custom Job", size, pizzaToppings}])
             setPizzaToppings([])
+            setSelectedHalf("whole")
+            selectSize(undefined)
         }
 
         if (!currentUser) {
@@ -63,8 +65,9 @@ const CustomPizza = ({toppings}) => {
             </SizeSelect>}
 
             {size && <AssemblePizza>
-
+                
                 <SelectedPizza>
+                    <CancelButton onClick={(ev) => selectSize(undefined)}>X</CancelButton>
                     <SelectedPizzaHalf onClick={(ev) => {selectedHalf === "left" ? setSelectedHalf("whole") : setSelectedHalf("left")}} selected={selectedHalf !== "right" }>
                         <img src={pizzaHalves[size]} style={{ width: "clamp(100px, 6vw, 200px"}} alt="Small pizza half"/>
                     </SelectedPizzaHalf>
@@ -180,6 +183,13 @@ const SubmitPizzaButton = styled.button`
         transform: scale(0.9);
         box-shadow: inset 0 0 10px hsla(0, 100%, 0%, 0.5);
     }
+`
+const CancelButton = styled.button`
+    position: relative;
+    display: block;
+    background: none;
+    border: none;
+    font-size: 26px;
 `
 
 const ToppingOption = styled.button`
