@@ -53,7 +53,7 @@ const PizzaCreate = ({update}) => {
     return (
         <Wrapper>
             {toppings && toppings.map((topping) => {
-                return <ToppingItem key={topping.name} name={topping.name} price={topping.price} selectedToppings={selectedToppings} setSelectedToppings={setSelectedToppings}/>
+                return <ToppingItem key={topping.name} name={topping.name} title={topping.title} price={topping.price} selectedToppings={selectedToppings} setSelectedToppings={setSelectedToppings}/>
             })}
             <PizzaEntryForm onSubmit={(ev) => handleNewPizza(ev, newPizzaName, selectedToppings)}>
                 <NewNameInput required value={newPizzaName} onChange={(ev) => setNewPizzaName(ev.target.value)}></NewNameInput>

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { BsCircleHalf } from "react-icons/bs";
 
-const ToppingItem = ({name, price, selectedToppings, setSelectedToppings}) => {
+const ToppingItem = ({name, title, price, selectedToppings, setSelectedToppings}) => {
     
     const isSelected = selectedToppings.find((topping) => topping.name === name)
-    const handleCLick = (location) => {
-        if (!isSelected || isSelected.half !== location) {
-            setSelectedToppings([...selectedToppings.filter((topping) => topping.name !== name), {name: name, half: location}])
+    const handleCLick = () => {
+        if (!isSelected) {
+            setSelectedToppings([...selectedToppings, {name, half: "whole"}])
         } else {
             setSelectedToppings(selectedToppings.filter((topping) => topping.name !== name))
         }
@@ -14,27 +14,9 @@ const ToppingItem = ({name, price, selectedToppings, setSelectedToppings}) => {
 
     return (
         <Wrapper isSelected={isSelected} onClick={(ev) => handleCLick("whole")}>
-            <ToppingName isSelected={isSelected}>{name.split(" ").map(str => str[0].toUpperCase() + str.substring(1, str.length)).join(" ")}</ToppingName>
-            
-            <HalfSelectors>
+            <ToppingName isSelected={isSelected}>{title}</ToppingName>
             <ToppingPrice isSelected={isSelected}>{"$" + price.toFixed(2)}</ToppingPrice>
-            <HalfButton style={{color: (isSelected && isSelected.half === "left") ? "var(--color-tertiary)" : "var(--color-healine)"}}
-            onClick={(ev) => {
-                    ev.stopPropagation()
-                    handleCLick("left")
-                }}>
-                <BsCircleHalf/>
-            </HalfButton>
-            <HalfButton style={{color: (isSelected && isSelected.half === "right") ? "var(--color-tertiary)" : "var(--color-healine)"}}
-            onClick={(ev) => {
-                    ev.stopPropagation()
-                    handleCLick("right")
-                }}>
-                <BsCircleHalf style={{transform: "rotate(180deg)", marginLeft: "5px"}}/>
-            </HalfButton>
-            </HalfSelectors>
         </Wrapper>
-        
     )
 }
 const Wrapper = styled.button`
@@ -59,12 +41,6 @@ const ToppingName = styled.p`
 const ToppingPrice = styled.p`
     display: inline;
     color: ${props => props.isSelected ? "var(--color-button-text)" : "var(--color-headline)"};
-`
-const HalfSelectors = styled.div`
-`
-const HalfButton = styled.button`
-    border: none;
-    background: none;
 `
 
 export default ToppingItem
