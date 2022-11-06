@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import FailedNotif from "../FailedNotif";
 
 const NewTopping = ({update, setUpdate}) => {
     const initialTopping = {name: "", price: "", isVegan: true, isSpicy: false, isGlutenFree: true}
     const [newToppingObj, setNewToppingObj] = useState(initialTopping)
+    const [namingError, setNamingError] = useState(false)
 
     const handleNewTopping = (topping) => {
-        console.log(topping)
+        setNamingError(false)
         fetch("/admin/add-topping", {
             method: "POST",
             headers: {
@@ -17,8 +19,11 @@ const NewTopping = ({update, setUpdate}) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
-                setUpdate(!update)
+                if (data.message === "Topping added"){
+                    setUpdate(!update)
+                } else {
+                    setNamingError(true)
+                }
             })
             .catch((error) => {
                 console.error("error", error);
@@ -55,6 +60,8 @@ const NewTopping = ({update, setUpdate}) => {
                 
                 
                 <SubmitButton>Submit</SubmitButton>
+
+                {namingError ? <FailedNotif>Try another name</FailedNotif>: null}
             </AddToppingForm>
         </Wrapper>
     )

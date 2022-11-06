@@ -1,9 +1,20 @@
 import styled from "styled-components"
 
-const FailedNotif = () => {
+const FailedNotif = ({children}) => {
     return (
-        <p>You are out of range for delivery, please enter another address.</p>
+        <Wrapper>
+            {children}
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.p`
+    border: 1px solid red;
+    background-color: hsla(360, 100%, 72%, 0.55);
+    width: fit-content;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+`
 
 export default FailedNotif

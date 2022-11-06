@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { BsCircleHalf } from "react-icons/bs";
 
 const ToppingItem = ({name, title, price, selectedToppings, setSelectedToppings}) => {
     

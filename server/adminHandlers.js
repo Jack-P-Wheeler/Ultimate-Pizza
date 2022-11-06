@@ -18,17 +18,18 @@ const addTopping = async (req, res) => {
         checkExistsOrClose = await db.collection("toppings").findOne({name: name.toLowerCase()})
         if (!checkExistsOrClose) {
             await db.collection("toppings").insertOne({_id: uuidv4(), name: name.toLowerCase(), title: name, price: Number(price), isSpicy, isVegan, isGlutenFree})
+            res.status(200).json({
+                status: 200,
+                message: "Topping added"
+            })
         } else {
-            res.status(400).json({
-                status: 400,
+            res.status(200).json({
+                status: 200,
                 message: "Topping already exists or is close to a current name",
                 data: req.body
             })
         }
-        res.status(200).json({
-            status: 200,
-            message: "Topping added"
-        })
+        
     } catch (err) {
         res.status(500).json({
             status: 500,
