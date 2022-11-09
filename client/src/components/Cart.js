@@ -35,7 +35,6 @@ const Cart = () => {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data)
                     setCart([])
                 })
                 .catch((error) => {
@@ -69,6 +68,8 @@ const Wrapper = styled.div`
     background: white;
     margin-top: 100px;
     display: flex;
+    position: sticky;
+    bottom: 0;
 `
 const CartItems = styled.div`
     display: flex;

@@ -29,7 +29,6 @@ const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-    
 `
 const Info = styled.div`
 `
