@@ -61,7 +61,7 @@ const NewTopping = ({update, setUpdate}) => {
                 
                 <SubmitButton>Submit</SubmitButton>
 
-                {namingError ? <FailedNotif setFailure={setNamingError}>Try another name</FailedNotif>: null}
+                {namingError ? <FailedNotif setFailure={setNamingError} message={"Try another name"}/>: null}
             </AddToppingForm>
         </Wrapper>
     )

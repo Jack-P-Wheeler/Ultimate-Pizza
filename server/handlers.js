@@ -69,7 +69,7 @@ const getPizzas = async (req, res) => {
                 const isHalf = topping.half === "whole" ? 1 : 2
                 price += toppings.find(toppingInList => toppingInList.name === topping.name).price / isHalf
             })
-            return {name: pizza.name, toppings: pizza.toppings, prices: {small: price * 0.75 + 10, medium: price * 1 + 13, large: price * 1.25 + 17}}
+            return {name: pizza.name, toppings: pizza.toppings, prices: {Small: price * 0.75 + 10, Medium: price * 1 + 13, Large: price * 1.25 + 17}}
         })
         res.status(200).json({
             status: 200,

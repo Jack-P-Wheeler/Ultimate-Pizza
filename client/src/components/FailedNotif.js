@@ -1,10 +1,10 @@
 import styled from "styled-components"
 import { FiX } from "react-icons/fi";
 
-const FailedNotif = ({children, setFailure}) => {
+const FailedNotif = ({message, setFailure}) => {
     return (
         <Wrapper>
-            <Message>{children}</Message>
+            <Message>{message}</Message>
             <CloseButton onClick={() => setFailure(false)}><FiX/></CloseButton>
         </Wrapper>
     )

@@ -25,9 +25,9 @@ const PizzaCard = ({name, toppings, price}) => {
             </ToppingList>
             
             <SizeSelectorList>
-                <SizeSelect onClick={(ev) => addToCart(name, "small")}>S</SizeSelect>
-                <SizeSelect onClick={(ev) => addToCart(name, "medium")}>M</SizeSelect>
-                <SizeSelect onClick={(ev) => addToCart(name, "large")}>L</SizeSelect>
+                <SizeSelect onClick={(ev) => addToCart(name, "Small")}>S</SizeSelect>
+                <SizeSelect onClick={(ev) => addToCart(name, "Medium")}>M</SizeSelect>
+                <SizeSelect onClick={(ev) => addToCart(name, "Large")}>L</SizeSelect>
             </SizeSelectorList>
             
         </Wrapper>
@@ -50,7 +50,7 @@ const Wrapper = styled.div`
     transition: 100ms all;
 
     &:hover{
-        box-shadow: 5px 10px 10px hsla(0, 100%, 0%, 0.5);
+        box-shadow: 0 10px 10px hsla(0, 100%, 0%, 0.5);
     }
     
 `

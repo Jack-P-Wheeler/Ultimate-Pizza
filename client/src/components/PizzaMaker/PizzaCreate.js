@@ -29,17 +29,10 @@ const PizzaCreate = ({update}) => {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    if (data.status === 200){
-                        console.log(data)
-                        setFailed(false)
-                    } else {
-                        setFailed(true)
-                    }
+                    setFailed(false)
                 })
                 .catch((error) => {
-
-                    
-
+                    setFailed(true)
                     console.error("error", error);
                 });
         }
@@ -59,7 +52,7 @@ const PizzaCreate = ({update}) => {
                 <NewNameInput required value={newPizzaName} onChange={(ev) => setNewPizzaName(ev.target.value)}></NewNameInput>
                 <SubmitButton>Submit</SubmitButton>
             </PizzaEntryForm>
-            {failed && <FailedNotif/>}
+            {failed && <FailedNotif setFailure={setFailed} message={"Something went wrong while creating a Pizza."}/>}
         </Wrapper>
         
     )
